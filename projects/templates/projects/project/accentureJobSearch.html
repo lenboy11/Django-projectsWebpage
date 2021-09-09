@@ -1,0 +1,57 @@
+{% extends "projects/base.html" %}
+{% load cloudinary %}
+{% load static %}
+{% block content %}
+
+<div class="search-bar">
+    <input id="search-title" class="search-text" type="text">
+    <select id="selectCountry">
+        <option value="All" selected>All</option>
+        {% for country in countries %}
+        <option value="{{ country }}">{{ country }}</option>
+        {% endfor %}
+    </select>
+    <select id="selectLanguage">
+        <option value="All" selected>All</option>
+        {% for language in languages %}
+        <option value="{{ language }}">{{ language }}</option>
+        {% endfor %}
+    </select>
+</div>
+<table id="tableData">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>
+                Country
+            </th>
+            <th>
+                Language
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for job in jobs %}
+        <tr name="row">
+            <td><a href="{{ job.href }}" target="_blank">{{ job.title }}</td>
+            <td>{{ job.country }}</td>
+            <td>{{ job.language }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </thead>
+</table>
+
+
+{% endblock content %}
+
+{% block cssFiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'projects/css/tableCSS.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'projects/css/filterTableCSS.css' %}" />
+{% endblock cssFiles %}
+
+{% block jsFiles %}
+<script src="{% static 'projects/js/tableJS.js' %}"></script>
+<script src="{% static 'projects/js/filterTable.js' %}"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+{% endblock jsFiles %}

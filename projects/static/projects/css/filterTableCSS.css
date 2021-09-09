@@ -1,0 +1,81 @@
+:root {
+  --mainCol: rgba(38, 84, 124, 1);
+  --mainOpac: rgba(0, 84, 124, 0.95);
+  --accent: rgba(6, 124, 160, 1);
+  --black: rgba(26, 9, 13, 1);
+  --blackOpac: rgba(26, 9, 13, 0.8);
+  --white: rgba(238, 238, 255, 1);
+  --red: rgba(255, 0, 0, 1);
+}
+
+.dropdown {
+  display: flex;
+  align-items: center;
+}
+
+.dropdown button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.countryList,
+.languageList {
+  position: relative;
+}
+
+.countryList ul,
+.languageList ul {
+  position: absolute;
+  display: flex;
+  margin-top: 10px;
+  width: 200px;
+  height: 200px;
+  overflow-y: scroll;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
+  list-style: none;
+  border-radius: 5px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 400ms none;
+  transform: translateY(-10px);
+}
+
+.countryList li,
+.languageList li {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  transition: 100ms;
+}
+
+.countryList li:hover,
+.languageList li:hover {
+  background: var(--blackOpac);
+}
+
+.countryList button:focus + ul {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0px);
+}
+
+.countryList label,
+.languageList label {
+  font-size: 1.25rem;
+  height: 100%;
+}
+
+table input[type="checkbox"] {
+  display: none;
+}
+
+.countryList nav {
+  position: absolute;
+  top: 60px;
+  width: 250px;
+}

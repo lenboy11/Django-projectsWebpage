@@ -1,0 +1,42 @@
+:root {
+  --mainCol: rgba(38, 84, 124, 1);
+  --mainOpac: rgba(0, 84, 124, 0.95);
+  --accent: rgba(6, 124, 160, 1);
+  --black: rgba(26, 9, 13, 1);
+  --blackOpac: rgba(26, 9, 13, 0.8);
+  --white: rgba(238, 238, 255, 1);
+  --red: rgba(255, 0, 0, 1);
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background-color: var(--blackOpac);
+  color: var(--white);
+  font-size: 1.25rem;
+}
+
+tbody a {
+  text-decoration: none !important;
+  color: var(--white);
+}
+
+td,
+th {
+  border: 1px solid var(--white);
+  text-align: left;
+  padding: 8px;
+}
+
+th {
+  font-weight: bold;
+  background-color: var(--black);
+}
+
+tr {
+  transition: 200ms;
+}
+
+tr:hover {
+  background-color: var(--blackOpac);
+}

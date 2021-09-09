@@ -1,0 +1,139 @@
+{% extends "projects/base.html" %}
+{% load cloudinary %}
+{% load static %}
+{% block content %}
+
+{% if user.is_staff or act %}
+<!-- act should be given as True or false depending if there are active projects -->
+<h1 class="headline">Projects:</h1>
+
+<div class="projects">
+  {% for proj in projects %}
+  {% if proj.active %}
+  {% if user.is_staff or not proj.private %}
+  <a href="#" onclick="openPopupA({{ proj.id }});return false;" class="proj-url">
+    <div class="project">
+      <img class="proj-img" src="{{ proj.frontpic.url }}" />
+      <div class="proj-cont">
+        <h1 class="proj-title">{{ proj.title }}</h1>
+        <p class="proj-dscrp">{{ proj.description|truncatechars:100 }}</p>
+        <p class="proj-date">
+          Created on {{ proj.date_created|date:'D, d. F Y' }}
+        </p>
+      </div>
+    </div>
+  </a>
+  <div class="popup passive" id="div {{proj.id }}" name="{{proj.id }}">
+    <div class="popup-header">
+      <a href="{% url 'project-detail' proj.id %}">
+        <h1 class="popup-title">{{ proj.title }}</h1>
+      </a>
+      {% if user == proj.author or user.is_superuser %}
+      <a class="popup-edit" href="{% url 'project-edit' proj.id %}"> Edit </a>
+      {% endif %}
+      <input type="button" class="popup-close" onclick="closePopupA({{ proj.id }});return false;" id="cl {{ proj.id }}"
+        name="{{ proj.id }}" value="&times;" />
+    </div>
+    <div class="popup-content">
+      <div class="popup-text">
+        <p>{{ proj.content|linebreaks }}</p>
+      </div>
+    </div>
+    <div class="popup-footer">
+      {% if proj.url != "#" %}
+      <input type="checkbox" class="popup-checkbox" id="ch {{ proj.id }}" name="{{ proj.id }}" value="Active"
+        checked="proj.active" />
+      {% endif %}
+      <p class="popup-date">
+        Created on {{ proj.date_created|date:'D, d. F Y' }}
+      </p>
+      {% if proj.url != "#" %}
+      <input type="button" class="popup-button" id="bu {{ proj.id }}" name="{{ proj.id }}" value="Get to the Project"
+        href="{{ proj.url }}" />
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+  {% endif %}
+  {% endfor %}
+
+  {% if user.is_authenticated %}
+  <a href="{% url 'project-create' %}" class="proj-url">
+    <div class="project">
+      <img class="proj-img"
+        src="https://res.cloudinary.com/dezbca68h/image/upload/v1630794253/projectsWebpage/static/add_proj_prcvca.png" />
+      <div class="proj-cont">
+        <h1 class="proj-title">Add Project</h1>
+        <p class="proj-dscrp">You can add a new project here</p>
+        <p class="proj-date">{% now "D, d. F Y" %}</p>
+      </div>
+    </div>
+  </a>
+  {% endif %}
+</div>
+{% endif %}
+
+{% if pas %}
+<h1 class="headline">Old Projects:</h1>
+
+<div class="projects row-projects">
+  {% for proj in projects %}
+  {% if not proj.active %}
+  {% if user.is_staff or not proj.private %}
+  <a href="#" onclick="openPopupA({{ proj.id }});return false;" class="proj-url">
+    <div class="project">
+      <!-- {% cloudinary proj.frontpic.image %} -->
+      <img class="proj-img" src="{{ proj.frontpic.url }}" />
+      <div class="proj-cont">
+        <h1 class="proj-title">{{ proj.title }}</h1>
+        <p class="proj-dscrp">{{ proj.description|truncatechars:100 }}</p>
+        <p class="proj-date">
+          Created on {{ proj.date_created|date:'D, d. F Y' }}
+        </p>
+      </div>
+    </div>
+  </a>
+  <div class="popup passive" id="div {{proj.id }}" name="{{proj.id }}">
+    <div class="popup-header">
+      <a href="{% url 'project-detail' proj.id %}">
+        <h1 class="popup-title">{{ proj.title }}</h1>
+      </a>
+      {% if user == proj.author or user.is_superuser %}
+      <a class="popup-edit" href="{% url 'project-edit' proj.id %}"> Edit </a>
+      {% endif %}
+      <input type="button" class="popup-close" onclick="closePopupA({{ proj.id }});return false;" id="cl {{ proj.id }}"
+        name="{{ proj.id }}" value="&times;" />
+    </div>
+    <p class="popup-text">{{ proj.content|linebreaks }}</p>
+    <div class="popup-footer">
+      {% if proj.url != "#" %}
+      <input type="checkbox" class="popup-checkbox" id="ch {{ proj.id }}" name="{{ proj.id }}" value="Active"
+        checked="proj.active" />
+      {% endif %}
+      <p class="popup-date">
+        Created on {{ proj.date_created|date:'D, d. F Y' }}
+      </p>
+      {% if proj.url != "#" %}
+      <input type="button" class="popup-button" id="bu {{ proj.id }}" name="{{ proj.id }}" value="Get to the Project"
+        href="{{ proj.url }}" />
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+  {% endif %}
+  {% endfor %}
+
+</div>
+{% endif %}
+
+<div class="overlay passive" id="overlay" onclick="overlayClose();return false;"></div>
+
+{% endblock content %}
+
+{% block cssFiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'projects/css/homeCSS.css' %}" />
+{% endblock cssFiles %}
+
+{% block jsFiles %}
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'projects/js/???.js' %}" /> -->
+{% endblock jsFiles %}

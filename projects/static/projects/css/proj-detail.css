@@ -1,0 +1,76 @@
+.proj-detail {
+  background: radial-gradient(
+    rgba(255, 255, 255, 0.7),
+    rgba(255, 255, 255, 0.7)
+  );
+  background-origin: content-box;
+  background-repeat: no-repeat;
+  color: rgba(0, 0, 0, 1);
+  padding-top: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+  transition: all 200ms ease-in;
+  max-width: 100%;
+}
+
+.proj-detail:hover,
+.proj-detail:focus {
+  background-origin: padding-box;
+  transition: all 500ms ease-in;
+}
+
+.proj-descr {
+  padding-top: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.proj-text {
+  padding-left: 1rem !important;
+  padding-right: 1rem;
+}
+
+.proj-url {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.proj-img {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  height: 18rem;
+  width: 12rem;
+}
+
+.proj-active {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.proj-inactive {
+  color: rgba(50, 50, 50, 0.8);
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.proj-private {
+  color: rgba(50, 50, 50, 0.8);
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.proj-public {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.proj-dates {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.proj-dates {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}

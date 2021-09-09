@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+  <!-- CSS Files -->
+  <link rel="stylesheet" type="text/css" href="{% static 'projects/css/main.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'projects/css/base.css' %}" />
+  {% block cssFiles %}
+  {% endblock cssFiles %}
+  {% for cs in cssFiles %}
+  <link rel="stylesheet" type="text/css" href="{% static cs %}" />
+  {% endfor %}
+  <!-- Title -->
+  {% if title %}
+  <title>Life of Lenboy - {{ title }}</title>
+  {% else %}
+  <title>Life of Lenboy</title>
+  {% endif %}
+  {% block title %}
+  {% endblock title %}
+</head>
+
+<body>
+  <header>
+    <a class="main-logo" href="{% url 'projects-home' %}"><img class="logo"
+        src="https://res.cloudinary.com/dezbca68h/image/upload/v1630794372/projectsWebpage/static/lenboy-logo_laf52q.svg"
+        alt="𝗟𝗲𝗻𝗯𝗼𝘆" width="25px" height="25px">
+    </a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <nav>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Page 2</a></li>
+        <li><a href="#">Page 3</a></li>
+        <li><a href="#">Page 4</a></li>
+        {% if user.is_authenticated %}
+        <li><a href=" {% url 'project-create' %}">Create New</a></li>
+        <li><a href="{% url 'profile' %}">Profile</a></li>
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+        {% else %}
+        <li><a href="{% url 'register' %}">Register</a></li>
+        <li><a href="{% url 'login' %}">Login</a></li>
+        {% endif %}
+      </ul>
+
+    </nav>
+    <label for="nav-toggle" class="nav-toggle-label">
+      <span></span>
+    </label>
+  </header>
+
+  <main role="main" class="content"
+    style="background-image: url(https://res.cloudinary.com/dezbca68h/image/upload/v1630794362/projectsWebpage/static/LennART_hbx12x.png);">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    <!-- Page Content -->
+    {% block content %}
+    {% endblock content %}
+  </main>
+
+  <footer>
+    {% if mainUser.profile.linkedIn %}
+    <a href="{{ mainUser.profile.linkedIn }}" target="_blank"> <img
+        src="https://res.cloudinary.com/dezbca68h/image/upload/v1630794372/projectsWebpage/static/linkedin-logo_iyw1jn.svg"
+        width="20" height="20"> </a>
+    {% endif %}
+    {% if mainUser.profile.instagram %}
+    <a href="{{ mainUser.profile.instagram }}" target="_blank"> <img
+        src="https://res.cloudinary.com/dezbca68h/image/upload/v1630794371/projectsWebpage/static/instagram-logo_sgngdj.svg"
+        width="20" height="20"> </a>
+    {% endif %}
+    {% if mainUser.profile.facebook %}
+    <a href="{{ mainUser.profile.facebook }}" target="_blank"> <img
+        src="https://res.cloudinary.com/dezbca68h/image/upload/v1630794371/projectsWebpage/static/facebook-logo_oyec6j.svg"
+        width="20" height="20"> </a>
+    {% endif %}
+    {% if mainUser.profile.youtube %}
+    <a href="{{ mainUser.profile.youtube }}" target="_blank"> <img
+        src="https://res.cloudinary.com/dezbca68h/image/upload/v1630794372/projectsWebpage/static/youtube-logo_ioekuu.svg"
+        width="20" height="20"> </a>
+    {% endif %}
+    {% if mainUser.profile.spotify %}
+    <a href="{{ mainUser.profile.spotify }}" target="_blank"> <img
+        src="https://res.cloudinary.com/dezbca68h/image/upload/v1630794371/projectsWebpage/static/spotify-logo_b6pdo3.svg"
+        width="20" height="20"> </a>
+    {% endif %}
+  </footer>
+
+  <!-- Optional JavaScript -->
+  <script src="{% static 'projects/js/homeJS.js' %}"></script>
+  {% block jsFiles %}
+  {% endblock jsFiles %}
+  {% for js in jsFiles %}
+  <link rel="stylesheet" type="text/css" href="{% static js %}" />
+  {% endfor %}
+
+</body>
+
+</html>
