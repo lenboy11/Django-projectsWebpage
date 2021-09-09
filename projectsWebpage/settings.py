@@ -37,7 +37,13 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'projects.apps.ProjectsConfig',
+    # 'projects.apps.LinksConfig',
     'users.apps.UsersConfig',
+    'jobs.apps.JobsConfig',
+    # 'jobs.apps.SkillsConfig',
+    # 'jobs.apps.CountriesConfig',
+    # 'jobs.apps.CitiesConfig',
+    # 'jobs.apps.CompaniesConfig',
     'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
