@@ -10,7 +10,7 @@ from django.views.generic import (
 from .models import Project, Link
 from urllib.parse import urlparse
 from django.contrib.auth.models import User
-from . import helperFunctions
+# from . import helperFunctions
 
 # Create your views here.
 
@@ -151,11 +151,11 @@ class LinkDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return context
 
 ## Views for individual Projects
-def accentureJobSearch(request):
-    context = {
-        'jobs' : helperFunctions.getAccentureJobs(),
-        'countries' : helperFunctions.getCountryName(),
-        'languages' : helperFunctions.getLanguageName(),
-        'mainUser': User.objects.filter(id=1).first(),
-    }
-    return render(request, 'projects/project/accentureJobSearch.html', context)
+# def accentureJobSearch(request):
+#     context = {
+#         'jobs' : helperFunctions.getAccentureJobs(),
+#         'countries' : helperFunctions.getCountryName(),
+#         'languages' : helperFunctions.getLanguageName(),
+#         'mainUser': User.objects.filter(id=1).first(),
+#     }
+#     return render(request, 'projects/project/accentureJobSearch.html', context)

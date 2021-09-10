@@ -83,11 +83,14 @@ def getAccentureJobs():
     source = requests.get( accentureWeb ).text
     soup = BeautifulSoup(source, 'lxml')
     countrylist = soup.find('ul', class_="countrylist")
-    countryCodes = {}
+    cs = {}
     try:
         for country in countrylist.find_all(class_='list-group-item'):
-            cc = country['data-country-site']
-            textlist = country.text.split()
+            countryLanguageCode = country['data-country-site'] # Country Code, e.g. za-en (South Africa - English)
+            languageCode = country['data-page-language']
+            countryCode = country['value']
+            # Determine Language (English, German, Spanish, ...)
+            textlist = country.text.split() # contains "countryName   ( languageName )"  where the spacing is uncommon and country name can have spaces, e.g. South Africa
             indexl = 1
             indexr = 4
             for i in range(2,len(textlist)):
@@ -96,10 +99,11 @@ def getAccentureJobs():
                 elif textlist[i] == ")":
                     indexr = i
                     break
-            language = ' '.join(textlist[indexl+1:indexr])
-            countryCodes[cc] = [ cc[3:5] , country['value'], language ]
-    except Exception:
-        pass
+            countryName = ' '.join(textlist[:indexl])   # country['value'] might be in non latin-letters
+            languageName = ' '.join(textlist[indexl+1:indexr])
+            cs[countryLanguageCode] = [ countryCode, languageCode, countryName, languageName ] # Example -> Key: cn-zh | Values: 中国大陆 (for API), zh-cn (for API), China/Mainland (for UI), Chinese (for UI)
+    except Exception as e:
+        print("Exception while fetching countryCodes and languageCodes: " + str(e))
     # Use accenture API to collect all jobs for every region
     accentureAPI = "https://www.accenture.com/api/sitecore/JobSearch/FindJobs"
     headers = {
@@ -114,20 +118,27 @@ def getAccentureJobs():
         "sec-fetch-site": "same-origin",
         "x-requested-with": "XMLHttpRequest"
         }
-    jobList = []
-    for cc in countryCodes:
-        payload = "{\"f\":1,\"s\":9,\"k\":\"\",\"lang\":\"" + countryCodes[cc][0] + "\",\"cs\":\"" + cc + "\",\"df\":\"[{\\\"metadatafieldname\\\":\\\"skill\\\",\\\"items\\\":[]},{\\\"metadatafieldname\\\":\\\"location\\\",\\\"items\\\":[]},{\\\"metadatafieldname\\\":\\\"postedDate\\\",\\\"items\\\":[]},{\\\"metadatafieldname\\\":\\\"travelPercentage\\\",\\\"items\\\":[]},{\\\"metadatafieldname\\\":\\\"jobTypeDescription\\\",\\\"items\\\":[{\\\"term\\\":\\\"entry-level job\\\",\\\"selected\\\":true}]},{\\\"metadatafieldname\\\":\\\"businessArea\\\",\\\"items\\\":[]},{\\\"metadatafieldname\\\":\\\"specialization\\\",\\\"items\\\":[]},{\\\"metadatafieldname\\\":\\\"workforceEntity\\\",\\\"items\\\":[]}]\",\"c\":\"" + countryCodes[cc][1] + "\",\"sf\":0,\"syn\":false,\"isPk\":false,\"wordDistance\":0,\"userId\":\"\"}"
+    jobDict = {}
+    for code in cs:
+        payload = ("{\"f\":1,\"s\":9,\"k\":\"" + searchTerm + "\",\"lang\":\"" + cs[code][1] + "\",\"cs\":\"" + code + "\",\"df\":\"[{\\\"metadatafieldname\\\":\\\"skill\\\",\\\"items\\\":[]},{\\\"metadatafieldname\\\":\\\"location\\\",\\\"items\\\":[]},{\\\"metadatafieldname\\\":\\\"postedDate\\\",\\\"items\\\":[]},{\\\"metadatafieldname\\\":\\\"travelPercentage\\\",\\\"items\\\":[]},{\\\"metadatafieldname\\\":\\\"jobTypeDescription\\\",\\\"items\\\":[]},{\\\"metadatafieldname\\\":\\\"businessArea\\\",\\\"items\\\":[]},{\\\"metadatafieldname\\\":\\\"specialization\\\",\\\"items\\\":[]},{\\\"metadatafieldname\\\":\\\"workforceEntity\\\",\\\"items\\\":[]}]\",\"c\":\"" +cs[code][0].encode("utf8").decode("utf8") + "\",\"sf\":0,\"syn\":false,\"isPk\":false,\"wordDistance\":0,\"userId\":\"\"}")
         #                 ?       ?   searchTerm              Language (en)                         countryCode (us-en)                                   Name of the field: Selections                               Name of the field: Selections                                 Name of the field:   Selections                                     Name of the field:     Selections                                      Name of the field: Selections                     Entry-Level Job is selected                                                      Name of the field: Selections                                     Name of the field:   Selections                                    Name of the field:     Selections                     countryName (Deutschland)       ?           ?               ?                   ?             ?
-        try:
-            response = requests.request("POST", accentureAPI, data=payload, headers=headers)
+        try: 
+            response = requests.request("POST", url, data=payload, headers=headers) # Issues with non latin letters like Chinese
             dict = response.json()
-            jobs = dict['documents']
-            for job in jobs:
-                jobUrl = job['jobDetailUrl'].split('/')
-                jobUrl[3] = cc
-                jobList.append( Job( job['title'], '/'.join(jobUrl), countryCodes[cc][1], countryCodes[cc][2] ) )
-        except Exception:
-            pass
-    return jobList
+        except Exception as e:
+            dict = { 'documents' : [] }
+            print( "Exception while sending API Call: " + str(e) )
+        
+        jobs = dict['documents']
+        for job in jobs:
+            # Add Country Code to jobUrl before adding it to the csv
+            jobUrl = job['jobDetailUrl'].split('/')
+            jobUrl[3] = code
+            try:
+                jobDict['/'.join(jobUrl)] = { 'title': job['title'], 'country': cs[code][3], 'language': cs[code][2] }
+            except Exception as e:
+                print("Exception while writing in csv: " + str(e)) # Solved by opening with encoding='UTF-8'
+
+    return jobDict
 
     # ?

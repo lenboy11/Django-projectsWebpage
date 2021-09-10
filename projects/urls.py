@@ -13,5 +13,4 @@ urlpatterns = [
     path('link/create/', views.LinkCreateView.as_view(), name="link-create"),
     path('link/<int:pk>/edit', views.LinkUpdateView.as_view(), name="link-edit"),
     path('link/<int:pk>/delete', views.LinkDeleteView.as_view(), name="link-delete"),
-    path('accenture/', views.accentureJobSearch, name="jobSearch-accenture"),
 ]

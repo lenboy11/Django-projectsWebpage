@@ -13,4 +13,7 @@ class CitiesConfig(AppConfig):
     name = 'cities'
 
 class CompaniesConfig(AppConfig):
-    name = 'company'
+    name = 'companies'
+
+class LanguagesConfig(AppConfig):
+    name = 'language'
